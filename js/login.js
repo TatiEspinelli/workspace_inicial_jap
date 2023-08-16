@@ -38,22 +38,8 @@ document.getElementById("password").addEventListener("keydown", function(event) 
 });
 
 
-// Función para habilitar o deshabilitar el botón de ingresar según la validez de los campos
-function actualizarBoton() {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-    var submitButton = document.querySelector(".submit-button");
-    
-    if (username !== "" && password !== "") {
-        submitButton.disabled = false;
-        submitButton.classList.add("active");
-    } else {
-        submitButton.disabled = true;
-        submitButton.classList.remove("active");
-    }
-}
-
 // Llama a la función actualizarBoton cada vez que los campos cambian
 document.getElementById("username").addEventListener("input", actualizarBoton);
 document.getElementById("password").addEventListener("input", actualizarBoton);
+
 
