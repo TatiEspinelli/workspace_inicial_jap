@@ -21,14 +21,18 @@
 <body>
   <main class="mt-5">
     <div class="container">
+     
       <form class="login-form">
+        <img id='imagenLogin' src="https://i.postimg.cc/tTv6kdpH/login-Img-fotor-bg-remover-20230810131946.png" alt="imagenDeLogin" width="220" height="80">
             <h2>Iniciar sesión</h2>
-            <label for="username">Usuario:</label>
-            <input type="text" id="username" name="username" class="input-field" required>
+            <label for="username"></label>
+            <input type="text" id="username" name="username" class="input-field" required placeholder="Usuario">
             
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" class="input-field" required>
+            <label for="password"></label>
+            <input type="password" id="password" name="password" class="input-field" required placeholder="Contraseña">
             
+            <div><label class="remember-me"><input type="checkbox" value="remember-me"> Recordar usuario </label></div>
+
             <button type="button" class="submit-button" onclick="login()">Ingresar</button>
         </form>
   </div>
@@ -42,6 +46,7 @@
     </div>
   </footer>
   <script src="js/login.js"></script>
+  <script src="my-profile.js"></script>
 </body>
 
 </html>

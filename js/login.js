@@ -56,3 +56,4 @@ function actualizarBoton() {
 // Llama a la función actualizarBoton cada vez que los campos cambian
 document.getElementById("username").addEventListener("input", actualizarBoton);
 document.getElementById("password").addEventListener("input", actualizarBoton);
+
