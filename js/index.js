@@ -21,7 +21,7 @@ function checkAuthentication() {
     
     // Si el usuario no está autenticado (isLoggedIn es null o falso)
     if (!isLoggedIn) {
-        window.location.href = "../login.html"; // Redirigimos al usuario a la página de inicio de sesión
+        window.location.href = "login.html"; // Redirigimos al usuario a la página de inicio de sesión
     }
 }
 
