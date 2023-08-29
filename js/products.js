@@ -1,3 +1,4 @@
+let products = [];
 // Función para obtener la URL de la categoría específica
 function getCategoryURL(catID) {
   // La función toma el argumento catID
@@ -34,6 +35,10 @@ async function loadProductsFromURL(url) {
 
 // Función para agregar productos al contenedor
 function displayProducts(products, container) {
+  console.log(products);
+  // Limpiar el contenido existente en el contenedor
+  container.innerHTML = "";
+
   // La función toma la lista products y un contenedor HTML (container) como argumentos
   products.forEach((product) => {
     // Iteramos a través de la lista de productos, crea los elementos para cada producto y los agrega al contenedor
@@ -74,6 +79,25 @@ function filterByPrice(products, minPrice, maxPrice) {
     // Devuelve 'true' si el precio del producto está dentro del rango especificado
     return productPrice >= minPrice && productPrice <= maxPrice;
   });
+}
+
+// Función para ordenar productos por precio ascendente
+function sortByAscPrice(products) {
+  return products
+    .slice() // Creamos una copia de la lista de productos para no modificar la original
+    .sort((a, b) => parseFloat(a.cost) - parseFloat(b.cost)); // Comparamos los precios y ordenamos de manera ascendente
+}
+
+// Función para ordenar productos por precio descendente
+function sortByDescPrice(products) {
+  return products
+    .slice()
+    .sort((a, b) => parseFloat(b.cost) - parseFloat(a.cost)); // Comparamos los precios y ordenamos de manera descendente
+}
+
+// Función para ordenar productos por relevancia descendente (cantidad vendida)
+function sortByDescRelevance(products) {
+  return products.slice().sort((a, b) => b.soldCount - a.soldCount); // Comparamos las cantidades vendidas y ordenamos de manera descendente
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -126,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const url = getCategoryURL(catID);
       const products = await loadProductsFromURL(url);
 
-      const productContainer = document.getElementById("product-list");
+      productContainer = document.getElementById("product-list");
       productContainer.innerHTML = ""; // Limpiamos el contenido existente
 
       // Mostramos todos los productos en el contenedor
@@ -138,6 +162,55 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error("Error al cargar y mostrar los productos:", error);
     }
+  });
+
+  // Obtenemos los elementos de botón para ordenar según los criterios
+  const sortAscPriceButton = document.getElementById("sortAscPrice");
+  const sortDescPriceButton = document.getElementById("sortDescPrice");
+  const sortDescRelevanceButton = document.getElementById("sortDescRelevance");
+
+  // Agregamos listeners de eventos a los botones de ordenamiento
+  sortAscPriceButton.addEventListener("click", () => {
+    console.log("Botón de Ordenamiento A-Z clickeado"); // Imprimimos en consola para verificar el evento
+    const sortedProducts = sortByAscPrice(products); // Ordenamos los productos por precio ascendente
+    displayProducts(sortedProducts, productContainer); // Mostramos los productos ordenados en el contenedor
+  });
+
+  sortDescPriceButton.addEventListener("click", () => {
+    console.log("Botón de Ordenamiento Z-A clickeado");
+    const sortedProducts = sortByDescPrice(products); // Ordenamos los productos por precio descendente
+    displayProducts(sortedProducts, productContainer);
+  });
+
+  sortDescRelevanceButton.addEventListener("click", () => {
+    console.log("Botón de Ordenamiento por Relevancia clickeado");
+    const sortedProducts = sortByDescRelevance(products); // Ordenamos los productos por relevancia descendente
+    displayProducts(sortedProducts, productContainer);
+  });
+
+  // Obtenemos el campo de búsqueda y el contenedor de productos
+  const searchInput = document.getElementById("searchInput");
+  productContainer = document.getElementById("product-list");
+
+  // Función para filtrar productos por título y descripción
+  function filterBySearchTerm(products, searchTerm) {
+    searchTerm = searchTerm.toLowerCase();
+    return products.filter((product) => {
+      const productName = product.name.toLowerCase();
+      const productDescription = product.description.toLowerCase();
+      return (
+        productName.includes(searchTerm) || // Comprobamos si el término de búsqueda está incluido en el nombre del producto
+        productDescription.includes(searchTerm) // Comprobamos si el término de búsqueda está incluido en la descripción del producto
+      );
+    });
+  }
+
+  // Evento input en el campo de búsqueda
+  searchInput.addEventListener("input", () => {
+    // Agregamos un listener cuando se introduce texto en el campo de búsqueda
+    const searchTerm = searchInput.value; // Obtenemos el valor actual del campo de búsqueda
+    const filteredProducts = filterBySearchTerm(products, searchTerm); // Filtramos los productos según el término de búsqueda
+    displayProducts(filteredProducts, productContainer); // Mostramos los productos filtrados en el contenedor de productos
   });
 
   // Cargamos y mostramos productos al cargar la página
