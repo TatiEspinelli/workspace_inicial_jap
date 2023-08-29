@@ -11,6 +11,7 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
   <link rel="stylesheet" href="css/products.css">
+
 </head>
 
 <body>
@@ -39,8 +40,38 @@
   </nav>
   <main class="pb-5 container">
     <div class="container">
-      <div id="product-list" class="row">
-    
+      <div class="row">
+        <div class="col text-end">
+          <div class="btn-group btn-group-toggle mb-4" data-bs-toggle="buttons">
+            <input type="button" class="btn-check" name="options" id="sortAsc">
+            <label class="btn btn-light" for="sortAsc">A-Z</label>
+            <input type="button" class="btn-check" name="options" id="sortDesc">
+            <label class="btn btn-light" for="sortDesc">Z-A</label>
+            <input type="button" class="btn-check" name="options" id="sortByCount" checked>
+            <label class="btn btn-light" for="sortByCount"><i class="fas fa-sort-amount-down mr-1"></i></label>
+          </div>
+        </div>
+      </div>
+      <div id="filter-container" class="row m-4">
+        <div class="col mb-4">
+          <p class="font-weight-normal text-end my-2">Precio</p>
+        </div>
+        <div class="col">
+          <input class="form-control" type="number" placeholder="min." id="rangeFilterCountMin">
+        </div>
+        <div class="col">
+          <input class="form-control" type="number" placeholder="máx." id="rangeFilterCountMax">
+        </div>
+        <div class="col-3 p-0">
+          <div class="btn-group" role="group">
+            <button class="btn btn-light btn-block" id="rangeFilterCount">Filtrar</button>
+            <button class="btn btn-link btn-sm" id="clearRangeFilter">Limpiar</button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="product-list" class="row m-4">
+       
       </div>
     </div>
   </main>
@@ -60,6 +91,7 @@
       <div></div>
     </div>
   </div>
+  
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/init.js"></script>
   <script src="js/products.js"></script>
