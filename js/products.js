@@ -2,7 +2,7 @@ let products = [];
 // Función para obtener la URL de la categoría específica
 function getCategoryURL(catID) {
   // La función toma el argumento catID
-  return `https://japceibal.github.io/emercado-api/cats_products/${catID}.json`; //y devuelve una URL construida usando ese verificador
+  return `${PRODUCTS_URL}${catID}${EXT_TYPE}`; //y devuelve una URL construida usando ese verificador
 
 }
 
