@@ -3,6 +3,7 @@ let products = [];
 function getCategoryURL(catID) {
   // La función toma el argumento catID
   return `https://japceibal.github.io/emercado-api/cats_products/${catID}.json`; //y devuelve una URL construida usando ese verificador
+
 }
 
 // Función para crear el contenido HTML de un producto
@@ -215,4 +216,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Cargamos y mostramos productos al cargar la página
   loadAndDisplayProducts();
+  
 });
