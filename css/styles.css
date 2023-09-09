@@ -222,3 +222,7 @@ a.custom-card:hover {
 .menu a:hover {
   background-color: #000000;
 }
+
+.product{
+  cursor: pointer;
+}
