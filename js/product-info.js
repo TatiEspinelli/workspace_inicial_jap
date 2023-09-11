@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Botón para enviar el comentario
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
-    submitButton.classList.add("btn", "btn-primary", "m-2");
+    submitButton.classList.add("btn", "btn-primary", "mt-2", "mb-4");
     submitButton.textContent = "Enviar comentario";
 
     // Agregar elementos al formulario
