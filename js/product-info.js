@@ -271,6 +271,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
+    // Creamos los elementos HTML que componen al formulario
     // Textarea para el comentario
     const commentTextarea = document.createElement("textarea");
     commentTextarea.id = "comment-text";
