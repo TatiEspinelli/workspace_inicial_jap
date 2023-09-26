@@ -194,7 +194,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const commentText = document.getElementById("comment-text").value;
       const commentRating = document.getElementById("comment-rating").value;
 
-
       // Validamos que se haya ingresado un comentario
       if (!commentText) {
         alert("Por favor, ingrese un comentario.");
@@ -205,8 +204,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const newComment = {
         comment: commentText,
         score: parseInt(commentRating),
-        user: username, 
-        dateTime: new Date().toLocaleString(), 
+        user: username,
+        dateTime: new Date().toLocaleString(),
       };
 
       // Agregamos el nuevo comentario a la lista existente
@@ -215,7 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Almacenamos la lista actualizada en el almacenamiento local
       localStorage.setItem("comments", JSON.stringify(comments));
 
-      // Limpiamos el formulario 
+      // Limpiamos el formulario
       commentForm.reset();
 
       // Actualizamos la vista de los comentarios
@@ -329,7 +328,73 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Agregar sección de comentarios al contenedor de información del producto
     productInfoContainer.appendChild(commentFormContainer);
 
-    // Cargar comentarios almacenados en el almacenamiento local 
+    // Mostrar los productos relacionados
+    const relatedProductsSection = document.createElement("div");
+    relatedProductsSection.classList.add("mt-4");
+
+    // Título para la sección de productos relacionados
+    const relatedProductsHeader = document.createElement("h3");
+    relatedProductsHeader.textContent = "Productos Relacionados";
+    relatedProductsHeader.classList.add("text-primary");
+    relatedProductsSection.appendChild(relatedProductsHeader);
+
+    // Creamos un contenedor para los productos relacionados
+    const relatedProductsContainer = document.createElement("div");
+    relatedProductsContainer.classList.add(
+      "d-flex",
+      "justify-content-center",
+      "flex-wrap",
+      "m-3",
+      "relatedProductsStyles"
+    );
+
+    // Iteramos a través de los productos relacionados y los mostramos
+    product.relatedProducts.forEach(async (relatedProduct) => {
+      // Creamos un div para cada producto relacionado
+      const relatedProductCard = document.createElement("div");
+      relatedProductCard.classList.add("card", "m-3", "w-25", "text-center");
+
+      // Agregamos un controlador de eventos para cada producto relacionado
+      relatedProductCard.addEventListener("click", () => {
+        // Guardamos el ID del producto relacionado en el almacenamiento local
+        localStorage.setItem("selectedProductId", relatedProduct.id);
+
+        // Redirigimos al usuario a la página de información del producto relacionado
+        window.location.href = "product-info.html";
+      });
+
+      // Creamos el cuerpo del producto relacionado
+      const relatedProductCardBody = document.createElement("div");
+      relatedProductCardBody.classList.add("card-body");
+
+      // Agregamos el nombre del producto relacionado
+      const relatedProductName = document.createElement("h5");
+      relatedProductName.textContent = relatedProduct.name;
+      relatedProductName.classList.add("card-title");
+
+      // Agregamos la imagen del producto relacionado
+      const relatedProductImage = document.createElement("img");
+      relatedProductImage.src = relatedProduct.image;
+      relatedProductImage.classList.add("card-img-top");
+
+      // Agregamos el nombre y la imagen al cuerpo del producto relacionado
+      relatedProductCardBody.appendChild(relatedProductName);
+      relatedProductCardBody.appendChild(relatedProductImage);
+
+      // Agregamos el cuerpo del producto relacionado al div del producto
+      relatedProductCard.appendChild(relatedProductCardBody);
+
+      // Agregamos el div del producto relacionado al contenedor de productos relacionados
+      relatedProductsContainer.appendChild(relatedProductCard);
+    });
+
+    // Agregamos el contenedor de productos relacionados a la sección de productos relacionados
+    relatedProductsSection.appendChild(relatedProductsContainer);
+
+    // Agregamos la sección de productos relacionados al contenedor de información del producto
+    productInfoContainer.appendChild(relatedProductsSection);
+
+    // Cargar comentarios almacenados en el almacenamiento local
     if (localStorage.getItem("comments")) {
       comments = JSON.parse(localStorage.getItem("comments"));
       updateCommentsView(); // Actualizar la vista de los comentarios

@@ -34,10 +34,15 @@
   color: #464646; /* Color de texto para la descripción */
 }
 
-.bodyStyle{
-  background: linear-gradient(#453f3f, #b6b5b5);
+
+
+.relatedProductsStyles{
+  cursor: pointer;
 }
 
+.relatedProductsStyles h5:hover{
+  color: rgb(25, 25, 87);
+}
 @media (max-width: 1200px){
   .responsiveComment{
     display: flex !important;
