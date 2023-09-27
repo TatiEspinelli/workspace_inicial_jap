@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Una vez que obtenemos la información del producto, la mostramos en la página
     const productInfoContainer = document.getElementById("product-info");
-    productInfoContainer.classList.add("card", "rounded-3", "m-4", "shadow");
+    productInfoContainer.classList.add("card", "rounded-3", "m-4", "shadow", "darkModeProduct");
 
     // Creamos un elemento div para el carrusel
     const carouselContainer = document.createElement("div");
@@ -37,10 +37,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const carouselInner = document.createElement("div");
     carouselInner.classList.add("carousel-inner");
 
+
     // Iteramos a través del array 'images' y creamos elementos 'div' para cada imagen
     product.images.forEach((imageUrl, index) => {
       const carouselItem = document.createElement("div");
       carouselItem.classList.add("carousel-item");
+
 
       if (index === 0) {
         carouselItem.classList.add("active");
@@ -78,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const productSoldElement = document.createElement("p");
     productSoldElement.textContent = `Cantidad de productos vendidos: ${product.soldCount}`;
-    productSoldElement.classList.add("card-text", "text-secondary", "mb-4");
+    productSoldElement.classList.add("card-text", "text-secondary", "mb-4", "darkModeSold");
 
     // Agregamos los elementos de texto al contenedor de información del producto
     productInfoContainer.appendChild(productNameElement);
@@ -122,13 +124,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Creamos una cabecera para los comentarios
     const commentsHeader = document.createElement("h3");
     commentsHeader.textContent = "Comentarios de los usuarios";
-    commentsHeader.classList.add("text-primary");
+    commentsHeader.classList.add("text-primary", "darkModeTitle");
     commentsSection.appendChild(commentsHeader);
 
     // Iteramos sobre los comentarios y los mostramos
     comments.forEach((comment) => {
       const commentCard = document.createElement("div");
-      commentCard.classList.add("card", "mb-3", "w-50", "mx-auto");
+      commentCard.classList.add("card", "mb-3", "w-50", "mx-auto", "darkModeComments");
 
       const commentCardBody = document.createElement("div");
       commentCardBody.classList.add("card-body");
@@ -157,7 +159,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const commentDescription = document.createElement("p");
       commentDescription.textContent = comment.description;
-      commentDescription.classList.add("m-4", "text-secondary");
+      commentDescription.classList.add("m-4",  "darkModeTextComments");
 
       const commentRating = createStarRating(comment.score); // Llama a la función para crear las estrellas
 
@@ -182,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Título para la sección de comentarios
     const commentTitle = document.createElement("h3");
     commentTitle.textContent = "Deja un comentario";
-    commentTitle.classList.add("text-primary");
+    commentTitle.classList.add("text-primary", "darkModeTitle");
     commentFormContainer.appendChild(commentTitle);
 
     // Formulario para el comentario y la calificación
@@ -312,7 +314,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Botón para enviar el comentario
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
-    submitButton.classList.add("btn", "btn-primary", "mt-2", "mb-4");
+    submitButton.classList.add("btn", "btn-primary", "mt-2", "mb-4", "darkModeButton");
     submitButton.textContent = "Enviar comentario";
 
     // Agregar elementos al formulario
@@ -335,7 +337,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Título para la sección de productos relacionados
     const relatedProductsHeader = document.createElement("h3");
     relatedProductsHeader.textContent = "Productos Relacionados";
-    relatedProductsHeader.classList.add("text-primary");
+    relatedProductsHeader.classList.add("text-primary", "darkModeTitle");
     relatedProductsSection.appendChild(relatedProductsHeader);
 
     // Creamos un contenedor para los productos relacionados

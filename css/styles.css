@@ -238,13 +238,40 @@ a.custom-card:hover {
 /* Dark Mode */
 
 body.dark-mode {
-  background: linear-gradient(to bottom, #212529, #ccc);
+  background-color: #272727;
   color: white;
 }
 
 body.dark-mode #cat-list-container .list-group-item{
   background-color: #757575;
 }
+
+body.dark-mode .darkMode{
+  background-color: #757575;
+}
+
+body.dark-mode .darkModeProduct{
+  background-color: #3b3b3b;
+}
+
+body.dark-mode .darkModeComments{
+  background-color: transparent;
+  border-color: #565656;
+  border-radius: 10px;
+}
+
+body.dark-mode .darkModeTextComments{
+  color: white;
+}
+
+body.dark-mode .darkModeTitle{
+  color: white !important;
+}
+
+body.dark-mode .darkModeSold{
+  color: rgb(196, 196, 196) !important;
+}
+
 
 body.dark-mode h4 {
   color: white;
