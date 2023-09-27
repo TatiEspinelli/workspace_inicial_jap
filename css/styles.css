@@ -234,6 +234,7 @@ a.custom-card:hover {
   display: flex;
   justify-content: center;
   cursor: pointer;
+  padding-top: 10px;
 }
 /* Dark Mode */
 
