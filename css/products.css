@@ -1,3 +1,10 @@
+.miniatura {
+  width: 50px;
+  height: 50px;
+}
+
+
+
 .product-item {
   border-bottom: 1px solid #ddd;
   background-color: #fff;
