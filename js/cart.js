@@ -1,20 +1,19 @@
-//Definimos una función para generar las filas
+// Definimos una función para generar las filas
 function createQueue(element) {
   const queue = document.createElement("tr");
   queue.innerHTML = `
-        <td><img src="${element.image
-    }" class="miniatura" class="img-thumbnail" class="img-fluid"></td>
-        <td class="text-success"> ${element.name}</td>
-        <td class="costo-cell text-success">${element.unitCost} ${element.currency}</td>
-        <td><input type="number" value="${element.count
-    }" class="col-sm-2 w-75 mx-auto form-control-sm cantidad-input"  min="0"></td>
-        <td class="subtotal-cell text-success">${element.unitCost * element.count} ${element.currency
-    }</td>
-        <td> <button class="delete-product" data-product-id="${element.id}" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-      </svg></button></td>
-    `;
+    <td><img src="${element.image}" class="miniatura" class="img-thumbnail" class="img-fluid"></td>
+    <td class="text-success"> ${element.name}</td>
+    <td class="costo-cell text-success">${element.currency === "UYU" ? (element.unitCost / 40).toFixed(2) : element.unitCost} USD</td>
+    <td><input type="number" value="${element.count}" class="col-sm-2 w-75 mx-auto form-control-sm cantidad-input" min="0"></td>
+    <td class="subtotal-cell text-success">${
+      (element.currency === "UYU" ? (element.unitCost / 40) : element.unitCost) * element.count
+    } USD</td>
+    <td> <button class="delete-product" data-product-id="${element.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+    </svg></button></td>
+  `;
   return queue;
 }
 
@@ -24,42 +23,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const cantidadInput = fila.querySelector(".cantidad-input");
     const costoCell = fila.querySelector(".costo-cell");
     const subtotalCell = fila.querySelector(".subtotal-cell");
-
     const cantidad = parseInt(cantidadInput.value);
     const costoUnitario = parseFloat(costoCell.textContent.split(" ")[0]); // Obtén el valor numérico del costo
+    const moneda = costoCell.textContent.split(" ")[1]; // Obten la unidad de moneda del costo
+    let subtotal = cantidad * costoUnitario;
 
-    const subtotal = cantidad * costoUnitario;
-    subtotalCell.textContent = subtotal.toFixed(0) + " USD";
+    if (moneda === "UYU") {
+      // Convierte el costo a dólares si la moneda es "UYU"
+      subtotal = subtotal / 40;
+    }
+
+    subtotalCell.textContent = `${subtotal.toFixed(2)} USD`;
 
     actualizarTotales();
   }
 
-  // Agrega un evento "input" al formulario para escuchar cambios en las cantidades y la selección del tipo de envío.
-  // Llama a la función calcularSubtotalPorFila y actualizarTotales en respuesta a estos cambios.
-  const form = document.querySelector("form");
-  form.addEventListener("input", (event) => {
-    if (event.target.classList.contains("cantidad-input")) {
-      // Solo calcular el subtotal si el evento proviene de un campo de cantidad
-      calcularSubtotal(event.target.closest("tr"));
-    }
-    actualizarTotales();
-  });
-
   function actualizarTotales() {
-    // Calculamos el subtotal general sumando los subtotales de todas las filas
     let subtotalGeneral = 0;
+    // Calculamos el subtotal general sumando los subtotales de todas las filas
     const filas = document.querySelectorAll("tbody tr");
     filas.forEach((fila) => {
-      // Obtenemos la celda que contiene el subtotal de una fila
       const subtotalCell = fila.querySelector(".subtotal-cell");
-      // Sumamos el valor del subtotal de esta fila al subtotal general
-      subtotalGeneral += parseFloat(subtotalCell.textContent);
+      const filaSubtotal = parseFloat(subtotalCell.textContent.split(" ")[0]);
+      const moneda = subtotalCell.textContent.split(" ")[1]; // Obten la moneda de la fila
+
+      if (moneda === "UYU") {
+        // Convierte el subtotal a dólares si la moneda es "UYU"
+        subtotalGeneral += filaSubtotal / 40;
+      } else {
+        subtotalGeneral += filaSubtotal;
+      }
     });
 
     // Obtenemos el valor del tipo de envío seleccionado
-    const selectedShippingOption = document.querySelector(
-      "input[name='shippingType']:checked"
-    );
+    const selectedShippingOption = document.querySelector("input[name='shippingType']:checked");
     let costoEnvio = 0;
 
     if (selectedShippingOption) {
@@ -79,16 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalPagar = subtotalGeneral + costoEnvio;
 
     // Actualizamos los valores en el HTML para mostrarlos al usuario
-    document.getElementById("subtotal").textContent =
-      subtotalGeneral.toFixed(0) + " USD";
-    document.getElementById("costo-envio").textContent =
-      costoEnvio.toFixed(0) + " USD";
-    document.getElementById("total-pagar").textContent =
-      totalPagar.toFixed(0) + " USD";
+    document.getElementById("subtotal").textContent = `${subtotalGeneral.toFixed(2)} USD`;
+    document.getElementById("costo-envio").textContent = `${costoEnvio.toFixed(2)} USD`;
+    document.getElementById("total-pagar").textContent = `${totalPagar.toFixed(2)} USD`;
   }
 
-  displayCartItems();
+  // Resto del código sin cambios
 
+  displayCartItems();
 
   function displayCartItems() {
     const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -118,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
           cantidadInput.value = cantidad; // Actualiza el valor en el input
         }
 
-        
         calcularSubtotal(queue);
         actualizarTotales();
       });
@@ -137,53 +131,23 @@ document.addEventListener("DOMContentLoaded", () => {
         actualizarTotales(); // Calcula los totales después de eliminar un producto
       });
     });
-     // Calcula los totales cuando se muestran los productos
-     actualizarTotales();
+    // Calcula los totales cuando se muestran los productos
+    actualizarTotales();
   }
 
-    const overlay = document.getElementById("overlay");
-    const mostrarOverlayButton = document.getElementById("mostrarOverlay");
-    const cerrarOverlayButton = document.getElementById("cerrarOverlay");
-  
-    mostrarOverlayButton.addEventListener("click", () => {
-      overlay.classList.add("active");
-      // Usamos setTimeout para cerrar el overlay después de 2 segundos (2000 milisegundos)
-      setTimeout(() => {
-        overlay.classList.remove("active");
-      }, 3000);
-    });
-  
-    cerrarOverlayButton.addEventListener("click", () => {
+  const overlay = document.getElementById("overlay");
+  const mostrarOverlayButton = document.getElementById("mostrarOverlay");
+  const cerrarOverlayButton = document.getElementById("cerrarOverlay");
+
+  mostrarOverlayButton.addEventListener("click", () => {
+    overlay.classList.add("active");
+    // Usamos setTimeout para cerrar el overlay después de 2 segundos (2000 milisegundos)
+    setTimeout(() => {
       overlay.classList.remove("active");
-    });
-    
+    }, 3000);
+  });
 
-    /*  SE PUEDE BORRAR (es un intento de la pauta 1)
-    const subTotal = document.getElementsByClassName("subtotal-cell").value;
-
-    subTotalytys = [];
-    array.forEach(element => {
-     
-    }); */
-
+  cerrarOverlayButton.addEventListener("click", () => {
+    overlay.classList.remove("active");
+  });
 });
-
-
-
-/* 
-Agrega un espacio donde se visualicen:
-
-El subtotal general: la suma de los subtotales (costo por cantidad) de todos los artículos
-El costo de envío: calculado a partir del envío seleccionado por el usuario (5%, 7% o 15%) y siendo un porcentaje del valor anterior (el subtotal).
-
-El total a pagar: la suma de los dos valores anteriores.
-Los 3 valores deberán actualizarse en tiempo real cuando se modifique el tipo de envío o los artículos en el carrito.
-
-Todos los valores deberán ser mostrados en dólares.
-
-
-if (currency == "UYU") {
-  
-} else {
-  
-}  */
