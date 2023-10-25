@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const costoCell = fila.querySelector(".costo-cell");
     const subtotalCell = fila.querySelector(".subtotal-cell");
     const cantidad = parseInt(cantidadInput.value);
-    const costoUnitario = parseFloat(costoCell.textContent.split(" ")[0]); // Obtén el valor numérico del costo
-    const moneda = costoCell.textContent.split(" ")[1]; // Obten la unidad de moneda del costo
+    const costoUnitario = parseFloat(costoCell.textContent.split(" ")[0]); // Obtenemos el valor numérico del costo
+    const moneda = costoCell.textContent.split(" ")[1]; // Obtenemos la unidad de moneda del costo
     let subtotal = cantidad * costoUnitario;
 
     if (moneda === "UYU") {
-      // Convierte el costo a dólares si la moneda es "UYU"
+      // Convertimos el costo a dólares si la moneda es "UYU"
       subtotal = subtotal / 40;
     }
 
@@ -81,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("total-pagar").textContent = `${totalPagar.toFixed(2)} USD`;
   }
 
-  // Resto del código sin cambios
 
   displayCartItems();
 
