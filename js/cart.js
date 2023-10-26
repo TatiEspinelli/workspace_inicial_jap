@@ -134,19 +134,193 @@ document.addEventListener("DOMContentLoaded", () => {
     actualizarTotales();
   }
 
-  const overlay = document.getElementById("overlay");
-  const mostrarOverlayButton = document.getElementById("mostrarOverlay");
-  const cerrarOverlayButton = document.getElementById("cerrarOverlay");
+    const overlay = document.getElementById("overlay");
+    const mostrarOverlayButton = document.getElementById("mostrarOverlay");
+    const cerrarOverlayButton = document.getElementById("cerrarOverlay");
+    const streetAddressInput = document.getElementById("streetAddress");
+    const numberAddressInput = document.getElementById("numberAddress");
+    const esquinaAddressInput = document.getElementById("cornerAddress");
+    const modalMediosPago = new bootstrap.Modal(document.getElementById('modalMediosPago'));
+    const saveChangesButton = document.querySelector('#modalMediosPago .btn-primary');
+    const creditCardNumberInput = document.getElementById('creditCard');
+    const creditCardCVVInput = document.getElementById('creditCardCVV');
+    const creditCardDateInput = document.getElementById('creditCardDate');
+    const cuentaBancariaInput = document.getElementById('cuentaBancaria');
+    
+    mostrarOverlayButton.addEventListener("click", () => {
+      // Validar la dirección de envío
+      if (streetAddressInput.value.trim() === "") {
+        streetAddressInput.classList.add("is-invalid");
+      } else {
+        streetAddressInput.classList.remove("is-invalid");
+        streetAddressInput.classList.add("is-valid");
+      }
+    
+      if (numberAddressInput.value.trim() === "") {
+        numberAddressInput.classList.add("is-invalid");
+      } else {
+        numberAddressInput.classList.remove("is-invalid");
+        numberAddressInput.classList.add("is-valid");
+      }
+    
+      if (esquinaAddressInput.value.trim() === "") {
+        esquinaAddressInput.classList.add("is-invalid");
+      } else {
+        esquinaAddressInput.classList.remove("is-invalid");
+        esquinaAddressInput.classList.add("is-valid");
+      }
+    
+      if (document.querySelector('input[name="flexRadioDefault"]:checked').id === 'flexRadioDefault1') {
+        // Validar campos de tarjeta de crédito
+        if (CC.value.trim() === "") {
+          CC.classList.add("is-invalid");
+        } else {
+          CC.classList.remove("is-invalid");
+          CC.classList.add("is-valid");
+        }
+    
+        if (CVV.value.trim() === "") {
+          CVV.classList.add("is-invalid");
+        } else {
+          CVV.classList.remove("is-invalid");
+          CVV.classList.add("is-valid");
+        }
+    
+        if (dateCC.value.trim() === "") {
+          dateCC.classList.add("is-invalid");
+        } else {
+          dateCC.classList.remove("is-invalid");
+          dateCC.classList.add("is-valid");
+        }
+      } else if (document.querySelector('input[name="flexRadioDefault"]:checked').id === 'flexRadioDefault2') {
+        // Validar campo de cuenta bancaria
+        if (bankAccount.value.trim() === "") {
+          bankAccount.classList.add("is-invalid");
+        } else {
+          bankAccount.classList.remove("is-invalid");
+          bankAccount.classList.add("is-valid");
+        }
+      }
+    
+      // Resto de la lógica de validación
+      // ...
+    
+      // Si todos los campos requeridos están llenos, mostrar el overlay de compra exitosa
+      if (document.querySelectorAll(".is-invalid").length === 0) {
+        overlay.classList.add("active");
+        setTimeout(() => {
+          overlay.classList.remove("active");
+        }, 2000);
+      }
+    });
+    
+    // Agregar eventos para quitar las clases de validación cuando se cambia el contenido de los campos
+    streetAddressInput.addEventListener("input", () => {
+      streetAddressInput.classList.remove("is-invalid", "is-valid");
+    });
+    
+    numberAddressInput.addEventListener("input", () => {
+      numberAddressInput.classList.remove("is-invalid", "is-valid");
+    });
+    
+    esquinaAddressInput.addEventListener("input", () => {
+      esquinaAddressInput.classList.remove("is-invalid", "is-valid");
+    });
+    
+    // Eventos para campos de tarjeta de crédito y cuenta bancaria
+    CC.addEventListener("input", () => {
+      CC.classList.remove("is-invalid", "is-valid");
+    });
+    
+    CVV.addEventListener("input", () => {
+      CVV.classList.remove("is-invalid", "is-valid");
+    });
+    
+    dateCC.addEventListener("input", () => {
+      dateCC.classList.remove("is-invalid", "is-valid");
+    });
+    
+    bankAccount.addEventListener("input", () => {
+      bankAccount.classList.remove("is-invalid", "is-valid");
+    });
 
-  mostrarOverlayButton.addEventListener("click", () => {
-    overlay.classList.add("active");
-    // Usamos setTimeout para cerrar el overlay después de 2 segundos (2000 milisegundos)
-    setTimeout(() => {
+    
+    mostrarOverlayButton.addEventListener("click", () => {
+      // Verificar si el campo de la calle está vacío
+      if (streetAddressInput.value.trim() === "" || 
+          numberAddressInput.value.trim() === "" || 
+          esquinaAddressInput.value.trim() === "") {
+        alert("Por favor, completa todos los campos de dirección antes de comprar.");
+      } else if (document.querySelector('input[name="flexRadioDefault"]:checked').id === 'flexRadioDefault1') {
+        // Verificar si se seleccionó tarjeta de crédito y validar campos de tarjeta de crédito
+        if (creditCardNumberInput.value.trim() === "" || 
+            creditCardCVVInput.value.trim() === "" || 
+            creditCardDateInput.value.trim() === "") {
+          alert("Por favor, completa todos los campos de tarjeta de crédito antes de comprar.");
+        } else {
+          // Mostrar el overlay de compra exitosa
+          overlay.classList.add("active");
+          // Usamos setTimeout para cerrar el overlay después de 2 segundos (2000 milisegundos)
+          setTimeout(() => {
+            overlay.classList.remove("active");
+          }, 2000);
+        }
+      } else if (document.querySelector('input[name="flexRadioDefault"]:checked').id === 'flexRadioDefault2') {
+        // Verificar si se seleccionó transferencia bancaria y validar campo de cuenta bancaria
+        if (cuentaBancariaInput.value.trim() === "") {
+          alert("Por favor, completa el campo de cuenta bancaria antes de comprar.");
+        } else {
+          // Mostrar el overlay de compra exitosa
+          overlay.classList.add("active");
+          // Usamos setTimeout para cerrar el overlay después de 2 segundos (2000 milisegundos)
+          setTimeout(() => {
+            overlay.classList.remove("active");
+          }, 2000);
+        }
+      } else {
+        // Si no se seleccionó ninguna opción de pago, mostrar un mensaje de error
+        alert("Por favor, selecciona una forma de pago antes de comprar.");
+      }
+    });
+    
+    cerrarOverlayButton.addEventListener("click", () => {
       overlay.classList.remove("active");
-    }, 3000);
+    });
+    
+
+});
+
+
+/*Script para manejar medios de pago Entrega6*/
+
+const ccTransfer = document.getElementById("flexRadioDefault1");
+const bankTransfer = document.getElementById("flexRadioDefault2");
+const CC = document.getElementById ("creditCard");
+const CVV = document.getElementById ("creditCardCVV"); 
+const dateCC = document.getElementById ("creditCardDate"); 
+const bankAccount = document.getElementById ("cuentaBancaria"); 
+
+
+ccTransfer.addEventListener("click", (event) => {
+  
+  bankAccount.setAttribute("disabled", "");
+  CC.removeAttribute("disabled");
+  CVV.removeAttribute("disabled");
+  dateCC.removeAttribute("disabled");
+ bankAccount.value = ''
+});
+
+
+  bankTransfer.addEventListener("click", (event) => {
+    CC.setAttribute("disabled", "");
+    CVV.setAttribute("disabled", "");
+    dateCC.setAttribute("disabled", "");
+    bankAccount.removeAttribute('disabled');
+    CC.value =''
+    CVV.value =''
+    dateCC.value =''
+
   });
 
-  cerrarOverlayButton.addEventListener("click", () => {
-    overlay.classList.remove("active");
-  });
-});
+
+/*Script para manejar medios de pago Entrega6*/
