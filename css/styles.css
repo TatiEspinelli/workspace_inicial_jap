@@ -343,6 +343,33 @@ body.dark-mode #newTask{
   color: red;
 }
 
+body.dark-mode .darkModeButton{
+  background-color: #d8d8d8;
+  color: black;
+}
+
+body.dark-mode .darkModeButton:hover{
+  background-color: rgb(78, 162, 105);
+}
+
+
+body.dark-mode .darkModeModal{
+  background-color: #272727 !important;
+  color: white;
+}
+
+body.dark-mode .darkModeButtonPayment{
+  background-color: white ;
+  color: black;
+}
+
+body.dark-mode .darkModeButtonPayment:hover{
+  background-color: rgb(78, 162, 105) ;
+}
+
+
+
+
 .profile-container{
   padding: 25px;
   padding-left: 250px;
@@ -358,3 +385,5 @@ body.dark-mode #newTask{
   appearance: none;
   margin: 0;
 }
+
+
