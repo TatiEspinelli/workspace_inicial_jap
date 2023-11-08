@@ -342,3 +342,19 @@ body.dark-mode #newTask{
   border: none;
   color: red;
 }
+
+.profile-container{
+  padding: 25px;
+  padding-left: 250px;
+  padding-right: 250px;
+}
+#creditCardCVV::-webkit-inner-spin-button,
+#creditCardCVV::-webkit-outer-spin-button,
+#phoneInput::-webkit-inner-spin-button,
+#phoneInput::-webkit-outer-spin-button,
+#numberAddress::-webkit-inner-spin-button,
+#numberAddress::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}

@@ -1,4 +1,4 @@
-// Definimos una función para generar las filas
+// Definimos una función para generar las rows
 function createQueue(element) {
   const queue = document.createElement("tr");
   queue.innerHTML = `
@@ -29,40 +29,40 @@ function createQueue(element) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Función para calcular el subtotal de una fila
-  function calcularSubtotal(fila) {
-    const cantidadInput = fila.querySelector(".cantidad-input");
-    const costoCell = fila.querySelector(".costo-cell");
-    const subtotalCell = fila.querySelector(".subtotal-cell");
-    const cantidad = parseInt(cantidadInput.value);
-    const costoUnitario = parseFloat(costoCell.textContent.split(" ")[0]); // Obtenemos el valor numérico del costo
-    const moneda = costoCell.textContent.split(" ")[1]; // Obtenemos la unidad de moneda del costo
-    let subtotal = cantidad * costoUnitario;
+  // Función para calcular el subtotal de una row
+  function calculateSubtotal(row) {
+    const inputAmount = row.querySelector(".cantidad-input");
+    const cellCost = row.querySelector(".costo-cell");
+    const subtotalCell = row.querySelector(".subtotal-cell");
+    const amount = parseInt(inputAmount.value);
+    const unitCost = parseFloat(cellCost.textContent.split(" ")[0]); // Obtenemos el valor numérico del costo
+    const currencyType = cellCost.textContent.split(" ")[1]; // Obtenemos la unidad de moneda del costo
+    let subtotal = amount * unitCost;
 
-    if (moneda === "UYU") {
+    if (currencyType === "UYU") {
       // Convertimos el costo a dólares si la moneda es "UYU"
       subtotal = subtotal / 40;
     }
 
     subtotalCell.textContent = `${subtotal.toFixed(2)} USD`;
 
-    actualizarTotales();
+    updateTotal();
   }
 
-  function actualizarTotales() {
-    let subtotalGeneral = 0;
-    // Calculamos el subtotal general sumando los subtotales de todas las filas
-    const filas = document.querySelectorAll("tbody tr");
-    filas.forEach((fila) => {
-      const subtotalCell = fila.querySelector(".subtotal-cell");
-      const filaSubtotal = parseFloat(subtotalCell.textContent.split(" ")[0]);
-      const moneda = subtotalCell.textContent.split(" ")[1]; // Obten la moneda de la fila
+  function updateTotal() {
+    let overallSubtotal = 0;
+    // Calculamos el subtotal general sumando los subtotales de todas las rows
+    const rows = document.querySelectorAll("tbody tr");
+    rows.forEach((row) => {
+      const subtotalCell = row.querySelector(".subtotal-cell");
+      const rowSubtotal = parseFloat(subtotalCell.textContent.split(" ")[0]);
+      const currencyType = subtotalCell.textContent.split(" ")[1]; // Obten la moneda de la row
 
-      if (moneda === "UYU") {
+      if (currencyType === "UYU") {
         // Convierte el subtotal a dólares si la moneda es "UYU"
-        subtotalGeneral += filaSubtotal / 40;
+        overallSubtotal += rowSubtotal / 40;
       } else {
-        subtotalGeneral += filaSubtotal;
+        overallSubtotal += rowSubtotal;
       }
     });
 
@@ -70,18 +70,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedShippingOption = document.querySelector(
       "input[name='shippingType']:checked"
     );
-    let costoEnvio = 0;
+    let shippingCost = 0;
 
     if (selectedShippingOption) {
       // Obtenemos el valor del tipo de envío seleccionado (premium, express, o standard)
       const shippingType = selectedShippingOption.value;
       // Calculamos el costo de envío en función del tipo de envío seleccionado
       if (shippingType === "premium") {
-        costoEnvio = subtotalGeneral * 0.15; // 15% del subtotal
+        shippingCost = overallSubtotal * 0.15; // 15% del subtotal
       } else if (shippingType === "express") {
-        costoEnvio = subtotalGeneral * 0.07; // 7% del subtotal
+        shippingCost = overallSubtotal * 0.07; // 7% del subtotal
       } else {
-        costoEnvio = subtotalGeneral * 0.05; // 5% del subtotal (por defecto)
+        shippingCost = overallSubtotal * 0.05; // 5% del subtotal (por defecto)
       }
     }
 
@@ -91,21 +91,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     shippingOptions.forEach((option) => {
       option.addEventListener("change", () => {
-        actualizarTotales(); // Recalcula los totales cuando cambia la opción de envío
+        updateTotal(); // Recalcula los totales cuando cambia la opción de envío
       });
     });
 
     // Calculamos el total a pagar sumando el subtotal general y el costo de envío
-    const totalPagar = subtotalGeneral + costoEnvio;
+    const totalToPay = overallSubtotal + shippingCost;
 
     // Actualizamos los valores en el HTML para mostrarlos al usuario
     document.getElementById(
       "subtotal"
-    ).textContent = `${subtotalGeneral.toFixed(2)} USD`;
-    document.getElementById("costo-envio").textContent = `${costoEnvio.toFixed(
+    ).textContent = `${overallSubtotal.toFixed(2)} USD`;
+    document.getElementById("costo-envio").textContent = `${shippingCost.toFixed(
       2
     )} USD`;
-    document.getElementById("total-pagar").textContent = `${totalPagar.toFixed(
+    document.getElementById("total-pagar").textContent = `${totalToPay.toFixed(
       2
     )} USD`;
   }
@@ -122,26 +122,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Iteramos sobre los productos en el carrito y los mostramos
     cartItems.forEach((product) => {
-      // Creamos una fila con los datos del producto
+      // Creamos una row con los datos del producto
       let queue = createQueue(product);
 
-      // Agregamos la fila a la tabla
+      // Agregamos la row a la tabla
       productInfoDiv.appendChild(queue);
 
-      // Agregamos un evento "input" al campo de cantidad en esta fila
-      const cantidadInput = queue.querySelector(".cantidad-input");
-      cantidadInput.addEventListener("input", () => {
+      // Agregamos un evento "input" al campo de cantidad en esta row
+      const inputAmount = queue.querySelector(".cantidad-input");
+      inputAmount.addEventListener("input", () => {
         // Obtén el valor actual del input
-        let cantidad = parseInt(cantidadInput.value);
+        let amount = parseInt(inputAmount.value);
 
         // Verifica si el valor es menor que 1
-        if (cantidad < 1) {
-          cantidad = 1; // Establece el valor mínimo en 1
-          cantidadInput.value = cantidad; // Actualiza el valor en el input
+        if (amount < 1) {
+          amount = 1; // Establece el valor mínimo en 1
+          inputAmount.value = amount; // Actualiza el valor en el input
         }
 
-        calcularSubtotal(queue);
-        actualizarTotales();
+        calculateSubtotal(queue);
+        updateTotal();
       });
 
       // Agregamos un evento de clic al icono de eliminación (X) en la imagen del producto
@@ -155,31 +155,24 @@ document.addEventListener("DOMContentLoaded", () => {
         // Eliminar el producto del localStorage
         const updatedCart = cartItems.filter((item) => item.id !== productId);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
-        actualizarTotales(); // Calcula los totales después de eliminar un producto
+        updateTotal(); // Calcula los totales después de eliminar un producto
       });
     });
     // Calcula los totales cuando se muestran los productos
-    actualizarTotales();
+    updateTotal();
   }
 
   const overlay = document.getElementById("overlay");
-  const mostrarOverlayButton = document.getElementById("mostrarOverlay");
-  const cerrarOverlayButton = document.getElementById("cerrarOverlay");
+  const showOverlayButton = document.getElementById("mostrarOverlay");
   const streetAddressInput = document.getElementById("streetAddress");
   const numberAddressInput = document.getElementById("numberAddress");
-  const esquinaAddressInput = document.getElementById("cornerAddress");
-  const modalMediosPago = new bootstrap.Modal(
-    document.getElementById("modalMediosPago")
-  );
-  const saveChangesButton = document.querySelector(
-    "#modalMediosPago .btn-primary"
-  );
+  const cornerAddressInput = document.getElementById("cornerAddress");
   const creditCardNumberInput = document.getElementById("creditCard");
   const creditCardCVVInput = document.getElementById("creditCardCVV");
   const creditCardDateInput = document.getElementById("creditCardDate");
-  const cuentaBancariaInput = document.getElementById("cuentaBancaria");
+  const bankAccountInput = document.getElementById("cuentaBancaria");
 
-  mostrarOverlayButton.addEventListener("click", () => {
+  showOverlayButton.addEventListener("click", () => {
     const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
     // Verificar si el carrito está vacío
@@ -202,11 +195,11 @@ document.addEventListener("DOMContentLoaded", () => {
       numberAddressInput.classList.add("is-valid");
     }
 
-    if (esquinaAddressInput.value.trim() === "") {
-      esquinaAddressInput.classList.add("is-invalid");
+    if (cornerAddressInput.value.trim() === "") {
+      cornerAddressInput.classList.add("is-invalid");
     } else {
-      esquinaAddressInput.classList.remove("is-invalid");
-      esquinaAddressInput.classList.add("is-valid");
+      cornerAddressInput.classList.remove("is-invalid");
+      cornerAddressInput.classList.add("is-valid");
     }
 
     if (
@@ -265,8 +258,8 @@ document.addEventListener("DOMContentLoaded", () => {
     numberAddressInput.classList.remove("is-invalid", "is-valid");
   });
 
-  esquinaAddressInput.addEventListener("input", () => {
-    esquinaAddressInput.classList.remove("is-invalid", "is-valid");
+  cornerAddressInput.addEventListener("input", () => {
+    cornerAddressInput.classList.remove("is-invalid", "is-valid");
   });
 
   // Eventos para campos de tarjeta de crédito y cuenta bancaria
@@ -286,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bankAccount.classList.remove("is-invalid", "is-valid");
   });
 
-  mostrarOverlayButton.addEventListener("click", () => {
+  showOverlayButton.addEventListener("click", () => {
     const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
     // Verificar si el carrito está vacío
@@ -298,7 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (
       streetAddressInput.value.trim() === "" ||
       numberAddressInput.value.trim() === "" ||
-      esquinaAddressInput.value.trim() === ""
+      cornerAddressInput.value.trim() === ""
     ) {
       alert(
         "Por favor, completa todos los campos de dirección antes de comprar."
@@ -329,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "flexRadioDefault2"
     ) {
       // Verificar si se seleccionó transferencia bancaria y validar campo de cuenta bancaria
-      if (cuentaBancariaInput.value.trim() === "") {
+      if (bankAccountInput.value.trim() === "") {
         alert(
           "Por favor, completa el campo de cuenta bancaria antes de comprar."
         );
@@ -347,9 +340,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  cerrarOverlayButton.addEventListener("click", () => {
-    overlay.classList.remove("active");
-  });
 });
 
 /*Script para manejar medios de pago Entrega6*/
